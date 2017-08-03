@@ -7,18 +7,41 @@ import RepoList from './components/RepoList.jsx';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       repos: []
     }
 
   }
-
+  componentDidMount () {
+    $.ajax({
+        method: 'GET',
+        url: 'http://localhost:1128/repos',
+        success: function(data) {
+          console.log('SUCCESS GET', data);
+          this.setState({repos: data});
+        }.bind(this),
+        error: function(err) {
+          console.log(err);
+        }
+    });
+  }
   search (term) {
     console.log(`${term} was searched`);
-    // TODO
+    $.ajax({
+        method: 'POST',
+        url: 'http://localhost:1128/repos',
+        data: term,
+        success: function(data) {
+          console.log(data);
+        }.bind(this),
+        error: function(err) {
+          console.log(err);
+        }
+    });
   }
 
   render () {
+
     return (<div>
       <h1>Github Fetcher</h1>
       <RepoList repos={this.state.repos}/>
