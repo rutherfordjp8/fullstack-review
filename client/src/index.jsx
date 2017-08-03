@@ -33,6 +33,7 @@ class App extends React.Component {
         data: term,
         success: function(data) {
           console.log(data);
+          
         }.bind(this),
         error: function(err) {
           console.log(err);

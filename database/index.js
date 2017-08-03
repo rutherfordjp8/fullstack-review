@@ -5,14 +5,15 @@ var connection = mongoose.connection;
 
 let repoSchema = mongoose.Schema({
   id: Number,
-  name: String,
+  name: {type: String, unique: true},
   full_name: String,
   owner: {
     id: Number,
     login: String,
     avatar_url: String
   },
-  description: String
+  description: String,
+  html_url: String
 });
 
 let Repo = mongoose.model('Repo', repoSchema);
@@ -36,7 +37,8 @@ let save = (err, repos) => {
           login: repos[i].owner.login,
           avatar_url: repos[i].owner.avatar_url,
         },
-        description: 'THIS IS WORKING'
+        description: repos[i].description,
+        html_url: repos[i].html_url
       });
       newModel.save(function(err) {
         if(err) {
@@ -61,7 +63,7 @@ let save = (err, repos) => {
 }
   let getRepos = (cb) => {
     // var results = connection.collection('repoSchema').find();
-    Repo.find().then(function(results) {
+    Repo.find().limit(25).then(function(results) {
 
       // console.log('INSIDE FIND', results);
       cb(results);
