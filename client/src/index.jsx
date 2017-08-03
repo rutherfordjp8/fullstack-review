@@ -32,8 +32,8 @@ class App extends React.Component {
         url: 'http://localhost:1128/repos',
         data: term,
         success: function(data) {
-          console.log(data);
-          
+          console.log('Successful POST: ', data);
+          setTimeout(this.render, 500);
         }.bind(this),
         error: function(err) {
           console.log(err);
@@ -42,7 +42,17 @@ class App extends React.Component {
   }
 
   render () {
-
+    $.ajax({
+        method: 'GET',
+        url: 'http://localhost:1128/repos',
+        success: function(data) {
+          console.log('SUCCESS GET', data);
+          this.setState({repos: data});
+        }.bind(this),
+        error: function(err) {
+          console.log(err);
+        }
+    });
     return (<div>
       <h1>Github Fetcher</h1>
       <RepoList repos={this.state.repos}/>
